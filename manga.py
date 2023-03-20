@@ -1,3 +1,4 @@
+#!C:\Programing\python-web\env\Scripts\python.exe python
 '''
 MangaDex-dl CLI
 
@@ -28,6 +29,7 @@ from random import randint
 from shutil import rmtree, copyfileobj
 from PyPDF2 import PdfMerger, PdfReader
 import requests
+import time
 api = mangadex.Api()
 merger = PdfMerger()
 abc = 'abcdefghijklmnopqrstuvwxyz'
@@ -61,7 +63,10 @@ def ret_float_or_int(num):
         else:
             return int(num.split('.')[0])
     else:
-        return int(num)
+        try:
+            return int(num)
+        except:
+            return False
 
 def path_prettify(path:str):
     new_path = path.replace('/', '\\')
@@ -85,7 +90,10 @@ def manga_downloader(args_dict):
 
     if manga_url != None:
         manga_id = manga_url.split('/')[-2]
-        print('Starting download of \'{}\''.format(api.view_manga_by_id(manga_id=manga_id).title['en']))
+        try:
+            print('\nStarting download of \'{}\''.format(api.view_manga_by_id(manga_id=manga_id).title['en']))
+        except:
+            pass
         print('\ngetting chapters and volumes..')
         mangadict = api.get_manga_volumes_and_chapters(manga_id=manga_id, translatedLanguage=['en'])
 
@@ -95,8 +103,9 @@ def manga_downloader(args_dict):
         for i in mangadict.keys():
             d1.update(mangadict[i]['chapters'])
         for i in d1:
-            if ret_float_or_int(i) >= range_[0] and ret_float_or_int(i) <= range_[1]:
-                unsorted_chap_dict[ret_float_or_int(i)] = d1[i]['id']
+            if ret_float_or_int(i) != False:
+                if ret_float_or_int(i) >= range_[0] and ret_float_or_int(i) <= range_[1]:
+                    unsorted_chap_dict[ret_float_or_int(i)] = d1[i]['id']
         for i in sorted(unsorted_chap_dict):
             chap_dict[i] = unsorted_chap_dict[i]
 
@@ -105,8 +114,17 @@ def manga_downloader(args_dict):
             r = requests.get(url='https://api.mangadex.org/at-home/server/' + chap_dict[i])
             data = r.json()
             ch_img_list = []
-            baseurl = data['baseUrl']
-            hash = data['chapter']['hash']
+            try:
+                baseurl = data['baseUrl']
+                hash = data['chapter']['hash']
+            except:
+                print('sleeping for 6..')
+                time.sleep(6)
+                r = requests.get(url='https://api.mangadex.org/at-home/server/' + chap_dict[i])
+                data = r.json()
+                print(data)
+                baseurl = data['baseUrl']
+                hash = data['chapter']['hash']
             url = baseurl + '/data-saver/' + hash + '/'
             for j in data['chapter']['dataSaver']:
                 ch_img_list.append(url + j)
@@ -127,19 +145,35 @@ def manga_downloader(args_dict):
             n = 1
             image_list = []
             img_obj_list = []
-
+            over = name_gen(len(ch_image[i]))
             for j in ch_image[i]:
-                r = requests.get(j, stream=True)
-                with open((str(i) + '/' + str(n) + j[-4:]), 'wb') as f:
+                try:
+                    r = requests.get(j, stream=True)
+                except:
+                    n = 1
+                    while n < 10:
+                        try:
+                            r = requests.get(j, stream=True)
+                            break
+                        except:
+                            n += 1
+                            pass
+                    else:
+                        print('Exception')
+                with open((str(i) + '/' + over[n-1]+ '-' +str(n) + j[-4:]), 'wb') as f:
                     r.raw.decode_content = True
                     copyfileobj(r.raw, f)
-                image_list.append(str(i) + '/' + str(n) + j[-4:])
+                image_list.append(str(i) + '/' + over[n-1] + '-' + str(n) + j[-4:])
                 n += 1
             all_images.extend(image_list)
             if pdf:
                 try:
                     for k in image_list:
-                        img_obj_list.append(Image.open(str(k)).convert('RGB'))
+                        try: 
+                            img_obj_list.append(Image.open(str(k)).convert('RGB'))
+                        except:
+                            print('turnc error')
+                            continue
                     print('converting chapter {} into pdf..'.format(i))
                 except UnidentifiedImageError:
                     print(UnidentifiedImageError.errno, 'Unidentified Image Error : ', UnidentifiedImageError.strerror)
@@ -183,5 +217,7 @@ def manga_downloader(args_dict):
         os.chdir('..')
         print('deleting ' + folder_name)
         rmtree(folder_name)
+        if os.path.exists('pdf'):
+            rmtree('pdf')
     else:
         pass

@@ -1,8 +1,8 @@
+#!C:\Programing\python-web\env\Scripts\python.exe python
 from sys import argv
 from manga import ret_float_or_int, manga_downloader
 args = argv
 __version__ = '1.0'
-
 # Loading the help dictionary
 with open('help-dict.txt') as f:
     help_dict = eval(f.read())
@@ -140,7 +140,9 @@ def check_ok(arg_dict):
     else:
         return True
 
-arg_dict = get_arguments(args)
-
-if check_ok(arg_dict):
-    manga_downloader(arg_dict)
+def main_():
+    arg_dict = get_arguments(args)
+    if check_ok(arg_dict=arg_dict):
+        manga_downloader(arg_dict)
+if __name__ == '__main__':
+    main_()
