@@ -87,11 +87,12 @@ def manga_downloader(args_dict):
     img = args_dict['img']
     merge = args_dict['merge']
     single_folder = args_dict['single_folder']
+    data_saver = args_dict['data_saver']
 
     if manga_url != None:
         manga_id = manga_url.split('/')[-2]
         try:
-            print('\nStarting download of \'{}\''.format(api.view_manga_by_id(manga_id=manga_id).title['en']))
+            print('\nStarting download of \'{}\''.format(api.view_manga_by_id(manga_id=manga_id).title['en'])) # Few English titles may not be availiable
         except:
             pass
         print('\ngetting chapters and volumes..')
@@ -108,28 +109,6 @@ def manga_downloader(args_dict):
                     unsorted_chap_dict[ret_float_or_int(i)] = d1[i]['id']
         for i in sorted(unsorted_chap_dict):
             chap_dict[i] = unsorted_chap_dict[i]
-
-        ch_image = {}
-        for i in chap_dict:
-            r = requests.get(url='https://api.mangadex.org/at-home/server/' + chap_dict[i])
-            data = r.json()
-            ch_img_list = []
-            try:
-                baseurl = data['baseUrl']
-                hash = data['chapter']['hash']
-            except:
-                print('sleeping for 6..')
-                time.sleep(6)
-                r = requests.get(url='https://api.mangadex.org/at-home/server/' + chap_dict[i])
-                data = r.json()
-                print(data)
-                baseurl = data['baseUrl']
-                hash = data['chapter']['hash']
-            url = baseurl + '/data-saver/' + hash + '/'
-            for j in data['chapter']['dataSaver']:
-                ch_img_list.append(url + j)
-            ch_image[i] = ch_img_list
-
         output_folder = os.getcwd() + ''
         folder_random_id = randint(10000, 99999)
         rel_folder_name = 'manga' + str(folder_random_id)
@@ -139,14 +118,38 @@ def manga_downloader(args_dict):
         print('Created root folder at : ' + folder_name)
         os.mkdir(folder_name + '\\' + 'pdf')
         all_images = []
-        for i in ch_image:
+        for i in chap_dict:
             print('\ndownloading images for chapter {}..'.format(i))
+            ch_img_list = []
+            try:
+                r = requests.get(url='https://api.mangadex.org/at-home/server/' + chap_dict[i])
+                data = r.json()
+                baseurl = data['baseUrl']
+                hash = data['chapter']['hash']
+            except:
+                time.sleep(5.0)
+                try:
+                    r = requests.get(url='https://api.mangadex.org/at-home/server/' + chap_dict[i])
+                    data = r.json()
+                    baseurl = data['baseUrl']
+                    hash = data['chapter']['hash']
+                except:
+                    print('ERROR: server is too crowded please wait a bit and re-run the program')
+                    rmtree(folder_name)
+            if data_saver:
+                url = baseurl + '/data-saver/' + hash + '/'
+                for j in data['chapter']['dataSaver']:
+                    ch_img_list.append(url + j)
+            else:
+                url = baseurl + '/data/' + hash + '/'
+                for j in data['chapter']['data']:
+                    ch_img_list.append(url + j)
             os.mkdir(str(i))
             n = 1
             image_list = []
             img_obj_list = []
-            over = name_gen(len(ch_image[i]))
-            for j in ch_image[i]:
+            over = name_gen(len(ch_img_list))
+            for j in ch_img_list:
                 try:
                     r = requests.get(j, stream=True)
                 except:
@@ -187,6 +190,7 @@ def manga_downloader(args_dict):
                     merger.append(PdfReader(folder_name + '/' + 'pdf/' + str(i) + '.pdf', 'rb'))
             else:
                 pass
+            time.sleep(0.75)
         
         if not pdf:
             if os.path.exists('pdf'):

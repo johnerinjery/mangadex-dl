@@ -51,6 +51,7 @@ def get_arguments(args):
     img = False
     merge = False
     single_folder = False
+    data_saver = True
     if len(args) == 1:
         help()
         return None
@@ -83,6 +84,8 @@ def get_arguments(args):
                 img = True
             elif i == '-m' or i == '--merge-pdf':
                 merge = True
+            elif i == '--data':
+                data_saver = False
             elif i == '-s' or i == '--single-folder':
                 single_folder = True
             elif i in range_1:
@@ -92,7 +95,7 @@ def get_arguments(args):
             else:
                 print('ERROR: Invalid Option', i)
                 return None
-    return {'manga_url' : manga_url, 'chapter_url' : chapter_url, 'range' : range_, 'pdf' : pdf, 'img' : img, 'merge' : merge, 'single_folder' : single_folder}
+    return {'manga_url' : manga_url, 'chapter_url' : chapter_url, 'range' : range_, 'pdf' : pdf, 'img' : img, 'merge' : merge, 'single_folder' : single_folder, 'data_saver' : data_saver}
 
 '''
 MangaDex-dl CLI argument analyzer
