@@ -105,7 +105,7 @@ def manga_downloader(args_dict):
             d1.update(mangadict[i]['chapters'])
         for i in d1:
             if ret_float_or_int(i) != False:
-                if ret_float_or_int(i) >= range_[0] and ret_float_or_int(i) <= range_[1]:
+                if ret_float_or_int(i) >= range_[0] and ret_float_or_int(i) < range_[1]:
                     unsorted_chap_dict[ret_float_or_int(i)] = d1[i]['id']
         for i in sorted(unsorted_chap_dict):
             chap_dict[i] = unsorted_chap_dict[i]
