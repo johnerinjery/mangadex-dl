@@ -1,6 +1,6 @@
 #!C:\Programing\python-web\env\Scripts\python.exe python
 from sys import argv
-from manga import ret_float_or_int, manga_downloader
+from manga_old import ret_float_or_int, manga_downloader
 args = argv
 __version__ = '1.0'
 # Loading the help dictionary
@@ -20,21 +20,27 @@ MangaDex-dl CLI help function
 handles all help details
 (yet to add help <option> help)
 '''
+
+
 def help(func='general'):
     if func not in help_dict_all_ops:
         print('ERROR : Invalid Option')
     else:
         for i in help_dict_ops:
             if func in i:
-                print(help_dict[list(help_dict.keys())[help_dict_ops.index(i)]])
+                print(help_dict[list(help_dict.keys())
+                      [help_dict_ops.index(i)]])
 
-# An helper function to parse the args           
+# An helper function to parse the args
+
+
 def obj_at_next_index(obj, stack, steps=1):
     index = stack.index(obj) + 1
-    if steps==1:
+    if steps == 1:
         return stack[index]
     else:
         return stack[index: index + steps]
+
 
 '''
 MangaDex-dl CLI argument collector function
@@ -42,6 +48,8 @@ MangaDex-dl CLI argument collector function
 collects all the arguments from input and categorises them,
 error raised if invalid args given, else arg dict returned
 '''
+
+
 def get_arguments(args):
     manga_url = None
     chapter_url = None
@@ -95,17 +103,20 @@ def get_arguments(args):
             else:
                 print('ERROR: Invalid Option', i)
                 return None
-    return {'manga_url' : manga_url, 'chapter_url' : chapter_url, 'range' : range_, 'pdf' : pdf, 'img' : img, 'merge' : merge, 'single_folder' : single_folder, 'data_saver' : data_saver}
+    return {'manga_url': manga_url, 'chapter_url': chapter_url, 'range': range_, 'pdf': pdf, 'img': img, 'merge': merge, 'single_folder': single_folder, 'data_saver': data_saver}
+
 
 '''
 MangaDex-dl CLI argument analyzer
 
 goes through the argument dictionary to find sematic errors
 '''
+
+
 def check_ok(arg_dict):
     if arg_dict == None:
         return False
-    
+
     manga_url = arg_dict['manga_url']
     chapter_url = arg_dict['chapter_url']
     range_ = arg_dict['range']
@@ -143,9 +154,12 @@ def check_ok(arg_dict):
     else:
         return True
 
+
 def main_():
     arg_dict = get_arguments(args)
     if check_ok(arg_dict=arg_dict):
         manga_downloader(arg_dict)
+
+
 if __name__ == '__main__':
     main_()

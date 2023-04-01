@@ -1,2 +1,3 @@
-from mangadex import Api
-print(float(10))
+import os
+
+print([x for x in os.listdir('pdf')])
