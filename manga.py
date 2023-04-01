@@ -1,4 +1,4 @@
-#!C:\Programing\python-web\env\Scripts\python.exe python
+#!env python
 '''
 MangaDex-dl CLI
 
@@ -190,7 +190,7 @@ def manga_downloader(args_dict):
                     merger.append(PdfReader(folder_name + '/' + 'pdf/' + str(i) + '.pdf', 'rb'))
             else:
                 pass
-            time.sleep(0.75)
+            time.sleep(1.1)
         
         if not pdf:
             if os.path.exists('pdf'):
