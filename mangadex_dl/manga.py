@@ -1,4 +1,4 @@
-from helper import ret_float_or_int
+from mangadex_dl.helper import ret_float_or_int
 import mangadex
 api = mangadex.Api()
 

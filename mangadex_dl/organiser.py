@@ -1,7 +1,7 @@
 from PyPDF2 import PdfMerger, PdfReader
 import os
 from PIL import Image, UnidentifiedImageError
-from helper import name_gen
+from mangadex_dl.helper import name_gen
 
 
 class Organiser:

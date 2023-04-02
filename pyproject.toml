@@ -1,0 +1,2 @@
+[build-system]
+requires = ["setuptools", 'mangadex==2.5.2','Pillow==9.4.0','PyPDF2==3.0.1','requests==2.28.2' ]

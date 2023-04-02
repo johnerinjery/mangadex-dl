@@ -1,10 +1,10 @@
-from helper import name_gen
+from mangadex_dl.helper import name_gen
 import time
 import requests
 from shutil import copyfileobj
 import os
 import mangadex
-from organiser import Organiser
+from mangadex_dl.organiser import Organiser
 api = mangadex.Api()
 
 

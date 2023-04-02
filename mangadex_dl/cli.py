@@ -22,22 +22,24 @@ Feel free to use it as you like!
 '''
 
 from sys import argv
-from helper import *
-from organiser import Organiser
-from manga import Manga
-from chapter import MangaChapter
+from mangadex_dl.helper import *
+from mangadex_dl.organiser import Organiser
+from mangadex_dl.manga import Manga
+from mangadex_dl.chapter import MangaChapter
 import os
 from shutil import rmtree
 from random import randint
 from time import sleep
 
+VERSION = '0.0.4'
 args = argv
-VERSION = '2.0.0'
+arg_dict = get_arguments(args)
 
 
 def main():
-    arg_dict = get_arguments(args)
-
+    '''
+    Main Entry Point of the CLI
+    '''
     if arg_dict != None:
         pass
     else:
@@ -148,7 +150,3 @@ def main():
                     os.rename(
                         folder_name, f'Chapter {organiser.range_[0]}-{organiser.range_[1]}')
                 print('done!')
-
-
-if __name__ == '__main__':
-    main()
