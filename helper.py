@@ -21,6 +21,7 @@ This software is completely open source.
 Feel free to use it as you like!
 
 '''
+VERSION = '2.0.0'
 abc = 'abcdefghijklmnopqrstuvwxyz'
 
 
@@ -107,18 +108,18 @@ def get_arguments(args):
     single_folder = False
     data_saver = True
     if len(args) == 1:
-        help()
+        help_()
         return None
     elif len(args) == 2:
         if args[-1] == '-V' or args[-1] == '--version':
-            help('-V')
+            help_('-V')
         elif args[-1] == '-h' or args[-1] == '--help':
-            help()
+            help_()
         else:
             print('ERROR: Invalid Syntax')
-        return None
+            return None
     elif len(args) == 3 and (('--help' in args) or ('-h' in args)):
-        help(args[-1])
+        help_(args[-1])
         return None
     else:
         for i in args[1:]:

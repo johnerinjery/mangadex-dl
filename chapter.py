@@ -10,13 +10,14 @@ api = mangadex.Api()
 
 class MangaChapter(Organiser):
 
-    def __init__(self, _id) -> None:
-        self.id = _id
-        self.chapter_number = str(api.get_chapter(_id).chapter)
+    def __init__(self, ch_url) -> None:
+        self.id = ch_url.split('/')[-1]
+        self.chapter_number = str(api.get_chapter(self.id).chapter)
+        self.chapter_name = api.get_chapter(self.id).title
 
-    def download_chapter(self):
+    def download_chapter(self, data_saver):
         ch_number = str(self.chapter_number)
-        print('downloading images for chapter {}..'.format(ch_number))
+        print('\ndownloading images for chapter {}..'.format(ch_number))
         os.mkdir(ch_number)
         all_ch_image_path = []
         try:
@@ -40,7 +41,7 @@ class MangaChapter(Organiser):
 
         image_list = []
 
-        if self.data_saver:
+        if data_saver:
             url = baseurl + '/data-saver/' + hash + '/'
             for j in data['chapter']['dataSaver']:
                 image_list.append(url + j)
@@ -82,8 +83,9 @@ class MangaChapter(Organiser):
 
             with open('all_images_paths.txt', 'r') as f:
                 all_images_paths_list = eval(f.read())
-            with open('all_images_paths.txt', 'a'):
-                f.write(str(all_images_paths_list.extend(all_ch_image_path)))
+            with open('all_images_paths.txt', 'w') as f:
+                all_images_paths_list.extend(all_ch_image_path)
+                f.write(str(all_images_paths_list))
 
         else:
 
@@ -94,8 +96,9 @@ class MangaChapter(Organiser):
             ch_dict = {ch_number: all_ch_image_path}
             with open('all_images_paths_ch_dict.txt', 'r') as f:
                 all_images_paths_ch_dict = eval(f.read())
-            with open('all_images_paths_ch_dict.txt', 'a'):
-                f.write(str(all_images_paths_ch_dict.update(ch_dict)))
+            with open('all_images_paths_ch_dict.txt', 'w') as f:
+                all_images_paths_ch_dict.update(ch_dict)
+                f.write(str(all_images_paths_ch_dict))
         else:
             with open('all_images_paths_ch_dict.txt', 'w') as f:
                 f.write(str({ch_number: all_ch_image_path}))

@@ -1,165 +1,148 @@
-#!C:\Programing\python-web\env\Scripts\python.exe python
+'''
+MangaDex-dl CLI
+
+This Command Line Client uses the ManagDex API to download manga
+and store it in image or PDF format.
+
+You can choose whether to have the software merge all the chapters
+downloaded into a single PDF, or have it in Chapterwise PDFs
+
+If you choose to download manga in image format, you can choose
+whether to save it in chapterwise folders or as a single large folder.
+- this option is made to make it more convinient for readers to scroll
+  through and read manga
+- another feature is that if the files are named in a format that
+  Andriod phones and PC's will be able to sort easily.
+- it names files in the format aaa-1.jpg, aab-2.jpg...ect.
+  if not, the file order will be quite messed up
+
+This software is completely open source.
+Feel free to use it as you like!
+
+'''
+
 from sys import argv
-from manga_old import ret_float_or_int, manga_downloader
+from helper import *
+from organiser import Organiser
+from manga import Manga
+from chapter import MangaChapter
+import os
+from shutil import rmtree
+from random import randint
+from time import sleep
+
 args = argv
-__version__ = '1.0'
-# Loading the help dictionary
-with open('help-dict.txt') as f:
-    help_dict = eval(f.read())
-    help_dict_ops = []
-    help_dict_all_ops = []
-    for i in help_dict.keys():
-        help_dict_ops.append(i.split(','))
-        for j in i.split(','):
-            if j != '':
-                help_dict_all_ops.append(j)
-
-'''
-MangaDex-dl CLI help function
-
-handles all help details
-(yet to add help <option> help)
-'''
+VERSION = '2.0.0'
 
 
-def help(func='general'):
-    if func not in help_dict_all_ops:
-        print('ERROR : Invalid Option')
-    else:
-        for i in help_dict_ops:
-            if func in i:
-                print(help_dict[list(help_dict.keys())
-                      [help_dict_ops.index(i)]])
-
-# An helper function to parse the args
-
-
-def obj_at_next_index(obj, stack, steps=1):
-    index = stack.index(obj) + 1
-    if steps == 1:
-        return stack[index]
-    else:
-        return stack[index: index + steps]
-
-
-'''
-MangaDex-dl CLI argument collector function
-
-collects all the arguments from input and categorises them,
-error raised if invalid args given, else arg dict returned
-'''
-
-
-def get_arguments(args):
-    manga_url = None
-    chapter_url = None
-    range_ = []
-    range_1 = []
-    pdf = True
-    img = False
-    merge = False
-    single_folder = False
-    data_saver = True
-    if len(args) == 1:
-        help()
-        return None
-    elif len(args) == 2:
-        if args[-1] == '-V' or args[-1] == '--version':
-            help('-V')
-        elif args[-1] == '-h' or args[-1] == '--help':
-            help()
-        else:
-            print('ERROR: Invalid Syntax')
-        return None
-    elif len(args) == 3 and (('--help' in args) or ('-h' in args)):
-        help(args[-1])
-        return None
-    else:
-        for i in args[1:]:
-            if i == '-t' or i == '--manga-url':
-                manga_url = obj_at_next_index(i, args)
-            elif i == '-c' or i == '--chapter-url':
-                chapter_url = obj_at_next_index(i, args)
-            elif i == '-r' or i == '--range':
-                range_1 = obj_at_next_index(i, args, 2)
-                for i in range_1:
-                    range_.append(ret_float_or_int(i))
-                range_.sort()
-            elif i == '-pdf':
-                continue
-            elif i == '-img':
-                pdf = False
-                img = True
-            elif i == '-m' or i == '--merge-pdf':
-                merge = True
-            elif i == '--data':
-                data_saver = False
-            elif i == '-s' or i == '--single-folder':
-                single_folder = True
-            elif i in range_1:
-                continue
-            elif i == manga_url or i == chapter_url:
-                continue
-            else:
-                print('ERROR: Invalid Option', i)
-                return None
-    return {'manga_url': manga_url, 'chapter_url': chapter_url, 'range': range_, 'pdf': pdf, 'img': img, 'merge': merge, 'single_folder': single_folder, 'data_saver': data_saver}
-
-
-'''
-MangaDex-dl CLI argument analyzer
-
-goes through the argument dictionary to find sematic errors
-'''
-
-
-def check_ok(arg_dict):
-    if arg_dict == None:
-        return False
-
-    manga_url = arg_dict['manga_url']
-    chapter_url = arg_dict['chapter_url']
-    range_ = arg_dict['range']
-    pdf = arg_dict['pdf']
-    img = arg_dict['img']
-    merge = arg_dict['merge']
-    single_folder = arg_dict['single_folder']
-    if chapter_url != None:
-        print('Chapter URLs are not supported currently.\nPlease use the manga url with both range values as the chapter number. eg (--range 12 12)')
-        return False
-    if manga_url == chapter_url == None:
-        print('ERROR: manga or chapter url must be provided')
-        return False
-    elif manga_url != None and chapter_url != None:
-        print('ERROR: both manga and chapter urls should not be provided')
-        return False
-    elif manga_url != None and range_ == []:
-        print('ERROR: Range must be provided for manga urls')
-        return False
-    elif chapter_url != None and range_ != []:
-        print('ERROR: Range should not be provided for chapter urls')
-        return False
-    elif pdf and img:
-        print('ERROR: Manga cannot be stored as both image and pdf')
-        return False
-    elif merge and single_folder:
-        print('ERROR: Cannot merge and single folder')
-        return False
-    elif pdf and single_folder:
-        print('ERROR: Cannot be both pdf and single folder')
-        return False
-    elif img and merge:
-        print('ERROR: Cannot be both img and merge')
-        return False
-    else:
-        return True
-
-
-def main_():
+def main():
     arg_dict = get_arguments(args)
-    if check_ok(arg_dict=arg_dict):
-        manga_downloader(arg_dict)
+    organiser = Organiser(args_dict=arg_dict)
+
+    if organiser.args_evaluvator():
+        folder_name = 'manga' + str(randint(10000, 99999))
+        os.mkdir(folder_name)
+        os.chdir(folder_name)
+
+        if organiser.pdf:
+
+            if organiser.chapter_url != None:
+                chapter = MangaChapter(organiser.chapter_url)
+                print(
+                    f'\nStarting download of Chapter {chapter.chapter_number} : {chapter.chapter_name}')
+                print(
+                    f'initialising download in folder : {os.getcwd()}')
+
+                ret = chapter.download_chapter(organiser.data_saver)
+                if ret == 1:
+                    ch_img_path_dict = eval(
+                        open('all_images_paths_ch_dict.txt').read())
+                    organiser.convert_chapter_images_to_pdf(ch_img_path_dict)
+                    os.rename(f'pdf/{chapter.chapter_number}.pdf',
+                              f'../Chapter {chapter.chapter_number}.pdf')
+                    print('deleting cache and temp folder..')
+                    os.chdir('..')
+                    rmtree(folder_name)
+                    print('done!')
+
+                else:
+                    sleep(5.0)
+                    ret = chapter.download_chapter(organiser.data_saver)
+                    if ret != 1:
+                        print(
+                            'ERROR: Could not download chapter. Check your network connection and try again later.')
+
+            else:
+                manga = Manga(organiser.manga_url)
+                print('\nStarting download of {}..'.format(manga.title))
+                print('initialising download in folder : {}'.format(os.getcwd()))
+                print('getting chapters and volumes..')
+                ch_dict = manga.get_chapter_dict(organiser.range_)
+                for i in ch_dict:
+                    chapter = MangaChapter(
+                        'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
+                    chapter.download_chapter(organiser.data_saver)
+                    ch_images = None
+                    with open('all_images_paths_ch_dict.txt') as f:
+                        all_images_paths_ch_dict = eval(f.read())
+                    for j in all_images_paths_ch_dict:
+                        if str(i) == str(j):
+                            ch_images = {
+                                str(i): all_images_paths_ch_dict[str(i)]}
+                            organiser.convert_chapter_images_to_pdf(ch_images)
+                if organiser.merge:
+                    organiser.pdf_merger()
+                else:
+                    os.rename(
+                        'pdf', f'../Chapter {organiser.range_[0]}-{organiser.range_[1]}')
+                print('\ndeleting cache and temp folder..')
+                os.chdir('..')
+                rmtree(folder_name)
+                print('done!')
+
+        else:
+
+            if organiser.chapter_url != None:
+                chapter = MangaChapter(organiser.chapter_url)
+                print(
+                    f'\nStarting download of Chapter {chapter.chapter_number} : {chapter.chapter_name}')
+                print(
+                    f'initialising download in folder : {os.path.join(os.getcwd(), folder_name)}')
+                chapter.download_chapter(organiser.data_saver)
+                for i in os.listdir('.'):
+                    if os.path.isdir(i):
+                        print('Organising image folder..')
+                        os.rename(i, f'../Chapter {i}')
+                print('deleting cache and temp folders..')
+                os.chdir('..')
+                rmtree(folder_name)
+                print('done!')
+
+            else:
+
+                manga = Manga(organiser.manga_url)
+                print('\nStarting download of {}..'.format(manga.title))
+                print('initialising download in folder : {}'.format(os.getcwd()))
+                print('getting chapters and volumes..')
+                ch_dict = manga.get_chapter_dict(organiser.range_)
+                for i in ch_dict:
+                    chapter = MangaChapter(
+                        'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
+                    chapter.download_chapter(organiser.data_saver)
+                print('Organising Image folders..')
+                if organiser.single_folder:
+                    organiser.single_folder_images()
+                    os.rename(
+                        'imgs', f'../Chapter {organiser.range_[0]}-{organiser.range_[1]}')
+                else:
+                    for i in os.listdir('.'):
+                        if os.path.isfile(i):
+                            os.remove(i)
+                    os.chdir('..')
+                    os.rename(
+                        folder_name, f'Chapter {organiser.range_[0]}-{organiser.range_[1]}')
+                print('done!')
 
 
 if __name__ == '__main__':
-    main_()
+    main()

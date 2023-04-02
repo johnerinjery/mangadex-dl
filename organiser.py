@@ -65,7 +65,7 @@ class Organiser:
                 print('truncination error in image {}. skipping page..'.format(
                     image_list.index(i)))
                 continue
-        print('converting chapter to PDF..')
+        print('converting chapter to PDF..\n')
 
         try:
             image_objs[0].save('pdf/' + str(list(ch_image_path.keys())[0]) +
@@ -84,7 +84,7 @@ class Organiser:
         pdf_dir = [float(i[:-4]) for i in os.listdir('pdf')]
         pdf_dir.sort()
         merger = PdfMerger()
-        print('merging chapters {} to {}'.format(pdf_dir[0], pdf_dir[-1]))
+        print('merging chapters {} to {}..'.format(pdf_dir[0], pdf_dir[-1]))
         for i in pdf_dir:
             merger.append(PdfReader('pdf/{}.pdf'.format(i)))
         merger.write(f'../chapter {pdf_dir[0]}-{pdf_dir[-1]}.pdf')
@@ -92,11 +92,11 @@ class Organiser:
 
     def single_folder_images(self):
         '''
-        Takes all images from chapterwise folders into a single folder
+        Takes all images from chapterwise folders into a single folder 'imgs'
         '''
         os.mkdir('imgs')
         with open('all_images_paths_ch_dict.txt') as f:
-            all_ch_dict = f.read()
+            all_ch_dict = eval(f.read())
         overlay = name_gen(len(eval(open('all_images_paths.txt').read())))
         n = 0
         for i in all_ch_dict:
