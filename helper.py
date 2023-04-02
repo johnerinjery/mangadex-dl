@@ -113,8 +113,10 @@ def get_arguments(args):
     elif len(args) == 2:
         if args[-1] == '-V' or args[-1] == '--version':
             help_('-V')
+            return None
         elif args[-1] == '-h' or args[-1] == '--help':
             help_()
+            return None
         else:
             print('ERROR: Invalid Syntax')
             return None

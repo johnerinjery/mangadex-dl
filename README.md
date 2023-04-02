@@ -1,0 +1,119 @@
+<p align="center">
+<h1 style='font-size:38px;' align="center">mangadex-dl</h1>
+</p>
+
+mangadex-dl is a command line interface written in python that downloads manga from [mangadex.org](https://mangadex.org/) as PDF or images
+
+<h2>What does mangadex-dl do? </h2>
+
+mangadex-dl enables you to : </br>
+
+- Download manga from [mangadex.org](https://mangadex.org/) using manga-urls or chapter-urls
+- Multiple chapters can be downloaded using manga urls
+- Single chapters can be downloaded using chapter-urls
+- Downloaded manga can be saved as PDFs or as images
+- Multiple chapter PDFs can be merged into one
+- Multiple chapter images can be brought into a single folder for a smoother reading experience
+- Downloaded Images are saved with a naming convention that ensures proper order of images in mobiles
+
+<h2>How does mangadex-dl download manga? </h2>
+
+mangadex-dl utilises the [mangadex api](https://api.mangadex.org/) to search and download manga
+
+<h2>Installation</h2>
+
+mangadex-dl can be downloaded by running the command :
+
+```python
+pip install mangadex-dl
+```
+
+to ensure package is installed correctly, run this script form shell:
+
+```python
+mangadex-dl --version
+```
+and it should return the version of managdex-dl you downloaded.
+
+if you see an error like this :
+
+```batch
+'mangadex-dl' is not recognized as an internal or external command,
+operable program or batch file.
+```
+
+ensure that you are using the proper python environment using which you downloaded the CLI, if it doesn't work even after reinstalling the program, please open an issue on [github.](https://github.com/john-erinjery/mangadex-dl/)
+
+<h2>Usage</h2>
+
+CLI Arguments are given below :
+
+```batch
+Usage : mangadex-dl [OPTIONS]
+
+Help:
+    -h, --help              print this help message and exit
+    -V, --version           display the version of MangaDex-dl
+
+Download:
+    -t, --manga-url         the mangadex manga url
+    -c, --chapter-url       the mangadex chapter url
+    -r, --range             the range of chapters to download.
+    -pdf                    download manga as chapterwise pdfs (default)
+    -img                    download manga as chapterwise images
+
+Post-Download-Processing:
+    -m, --merge-pdf         merges all chapter pdfs into one file
+    -s, --single-folder     collect all images into a single folder
+```
+
+for more info for each option you can run:
+
+```batch
+mangadex-dl --help <option>
+```
+
+<h2>Example Usage </h2>
+
+1. Downloads chapters 1 to 9 of manga as merged PDF
+   
+    ```batch
+    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -m -r 1 10
+    ```
+</br>
+ 
+2. Downloads chapters 1 to 9 of manga as single-folder images
+   ```batch
+   mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -s -r 1 10
+   ```
+</br>
+ 
+3. Downloads chapter as PDF
+   ```batch
+   mangadex-dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -pdf
+   ```
+</br>
+ 
+4. Downloads chapter as Images
+   ```batch
+   mangadex-dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -img
+   ```
+</br>
+ 
+5. Downloads chapters 1 to 9 as chapterwise PDFs
+    ```batch
+    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -r 1 10
+    ```
+</br>
+
+6. Downloads chapters 1 to 9 as chapterwise images
+   ```batch
+   mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -r 1 10
+   ```
+</br>
+
+<h2>In coming releases..</h2>
+
+- Support for MangaDex user account, access to library and reading lists
+- Functionality to search new manga from within the shell
+

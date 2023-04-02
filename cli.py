@@ -37,6 +37,12 @@ VERSION = '2.0.0'
 
 def main():
     arg_dict = get_arguments(args)
+
+    if arg_dict != None:
+        pass
+    else:
+        return
+
     organiser = Organiser(args_dict=arg_dict)
 
     if organiser.args_evaluvator():
