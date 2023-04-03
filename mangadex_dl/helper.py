@@ -21,68 +21,8 @@ This software is completely open source.
 Feel free to use it as you like!
 
 '''
-VERSION = '2.0.0'
+VERSION = '1.3.0'
 abc = 'abcdefghijklmnopqrstuvwxyz'
-help_dict = {
-    'general,': '''
-MangaDex-dl CLI, a manga download software powered by MangaDex API
-Usage : mangadex-dl [OPTION]
-
-Startup:
-    -h, --help              print this help message and exit
-    -V, --version           display the version of MangaDex-dl
-
-Download:
-    -t, --manga-url         the mangadex manga url (url is title page url)
-    -c, --chapter-url       the mangadex chapter url (url is chapter url) (currently unavailiable)
-    -r, --range             the range of chapters to download. (if manga url provided)
-    -pdf                    download manga as chapterwise pdfs (default)
-    -img                    download manga as chapterwise images
-
-Post-Download-Processing:
-    -m, --merge-pdf         merges all chapter pdfs into one file
-    -s, --single-folder     collect all images into a single folder
-
-for more information about an option,
-Run mangadex-dl --help <option>
-
-in case of bugs/issues/discussions please open an issue at
-https://github.com/john-erinjery/mangadex-dl
-''',
-    '-h,--help': '''
-MangaDex-dl CLI, a manga download software powered by MangaDex API
-Usage : mangadex-dl [OPTION]
-
-Startup:
-    -h, --help              print this help message and exit
-    -V, --version           display the version of MangaDex-dl
-
-Download:
-    -t, --manga-url         the mangadex manga url (url is title page url)
-    -c, --chapter-url       the mangadex chapter url (url is chapter url) (currently unavailiable)
-    -r, --range             the range of chapters to download. (if manga url provided)
-    -pdf                    download manga as chapterwise pdfs (default)
-    -img                    download manga as chapterwise images
-
-Post-Download-Processing:
-    -m, --merge-pdf         merges all chapter pdfs into one file
-    -s, --single-folder     collect all images into a single folder
-
-for more information about an option,
-Run mangadex-dl --help <option>
-
-in case of bugs/issues/discussions please open an issue at
-https://github.com/john-erinjery/mangadex-dl
-''',
-    '-V,--version': f'current version of MangaDex-dl is {VERSION}',
-    '-t,--manga-url': '\nThe MangaDex manga homepage url.\nNote that this is different from the chapter url. Manga URLs are of the form:\n\nhttps://mangadex.org/title/<manga-id>/<manga-name>\n\nfor eg: https://mangadex.org/title/9417ab7d-b231-4481-8279-34a873cc820f/chicchai-senpai-ga-kawaisugiru',
-    '-c,--chapter-url': '\nThe MangaDex chapter url\nNote that this is different from the manga url. Chapter URLs are of the form:\n\nhttps://mangadex.org/chapter/<chapter-id>\n\nfor eg: https://mangadex.org/chapter/23deab8b-8866-401a-925d-115788a0027c',
-    '-r,--range': 'The chapter range to be downloaded. Use only when providing Manga URLs.\n\nFormat : -r/--range <chapter-start> <chapter-end>\n\nTo download a single chapter pass the same value twice eg: --range 100 100',
-    '-pdf': 'Downloads manga as chapter-wise pdfs. Output will be a folder "pdf" containing pdf files of the chapters.',
-    '-img': 'Downloads mangs as chapter-wise image folders. Output will be an "imgs" folder containing image chapter folders',
-    '-s,--single-folder': 'Option only availiable when downloading as image files. All images will be sorted and stored in a single folder.',
-    '-m,--merge-pdf': 'Option only availiable when downloading as pdf files. All pdfs will be merged into a single pdf.'
-}
 
 
 def make_sortable(stack):
@@ -128,6 +68,70 @@ def ret_float_or_int(num):
 def path_prettify(path: str):
     new_path = path.replace('/', '\\')
     return new_path
+
+
+help_dict = {
+    'general,': '''
+MangaDex-dl CLI, a manga download software powered by MangaDex API
+Usage : mangadex_dl [OPTION]
+
+Startup:
+    -h, --help              print this help message and exit
+    -V, --version           display the version of MangaDex-dl
+
+Download:
+    -t, --manga-url         the mangadex manga url (url is title page url)
+    -c, --chapter-url       the mangadex chapter url (url is chapter url) (currently unavailiable)
+    -r, --range             the range of chapters to download. (if manga url provided)
+    -pdf                    download manga as chapterwise pdfs (default)
+    -img                    download manga as chapterwise images
+    --data                   download manga in high quality
+
+Post-Download-Processing:
+    -m, --merge-pdf         merges all chapter pdfs into one file
+    -s, --single-folder     collect all images into a single folder
+
+for more information about an option,
+Run mangadex-dl --help <option>
+
+in case of bugs/issues/discussions please open an issue at
+https://github.com/john-erinjery/mangadex-dl
+''',
+    '-h,--help': '''
+MangaDex-dl CLI, a manga download software powered by MangaDex API
+Usage : mangadex_dl [OPTION]
+
+Startup:
+    -h, --help              print this help message and exit
+    -V, --version           display the version of MangaDex-dl
+
+Download:
+    -t, --manga-url         the mangadex manga url (url is title page url)
+    -c, --chapter-url       the mangadex chapter url (url is chapter url) (currently unavailiable)
+    -r, --range             the range of chapters to download. (if manga url provided)
+    -pdf                    download manga as chapterwise pdfs (default)
+    -img                    download manga as chapterwise images
+    --data                   download manga in high quality
+Post-Download-Processing:
+    -m, --merge-pdf         merges all chapter pdfs into one file
+    -s, --single-folder     collect all images into a single folder
+
+for more information about an option,
+Run mangadex-dl --help <option>
+
+in case of bugs/issues/discussions please open an issue at
+https://github.com/john-erinjery/mangadex-dl
+''',
+    '-V,--version': f'current version of MangaDex-dl is {VERSION}',
+    '-t,--manga-url': '\nThe MangaDex manga homepage url.\nNote that this is different from the chapter url. Manga URLs are of the form:\n\nhttps://mangadex.org/title/<manga-id>/<manga-name>\n\nfor eg: https://mangadex.org/title/9417ab7d-b231-4481-8279-34a873cc820f/chicchai-senpai-ga-kawaisugiru',
+    '-c,--chapter-url': '\nThe MangaDex chapter url\nNote that this is different from the manga url. Chapter URLs are of the form:\n\nhttps://mangadex.org/chapter/<chapter-id>\n\nfor eg: https://mangadex.org/chapter/23deab8b-8866-401a-925d-115788a0027c',
+    '-r,--range': 'The chapter range to be downloaded. Use only when providing Manga URLs.\n\nFormat : -r/--range <chapter-start> <chapter-end>\n\nTo download a single chapter pass the same value twice eg: --range 100 100',
+    '-pdf': 'Downloads manga as chapter-wise pdfs. Output will be a folder "pdf" containing pdf files of the chapters.',
+    '-img': 'Downloads mangs as chapter-wise image folders. Output will be an "imgs" folder containing image chapter folders',
+    '-s,--single-folder': 'Option only availiable when downloading as image files. All images will be sorted and stored in a single folder.',
+    '-m,--merge-pdf': 'Option only availiable when downloading as pdf files. All pdfs will be merged into a single pdf.',
+    '--data': 'downloads manga in higher quality. note that the program might become slower with this option.'
+}
 
 
 def help_(func='general'):

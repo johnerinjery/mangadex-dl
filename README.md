@@ -24,21 +24,21 @@ mangadex-dl utilises the [mangadex api](https://api.mangadex.org/) to search and
 
 mangadex-dl can be downloaded by running the command :
 
-```python
+```
 pip install mangadex-dl
 ```
 
 to ensure package is installed correctly, run this script form shell:
 
-```python
-mangadex-dl --version
+```
+mangadex_dl --version
 ```
 and it should return the version of managdex-dl you downloaded.
 
 if you see an error like this :
 
-```batch
-'mangadex-dl' is not recognized as an internal or external command,
+```
+'mangadex_dl' is not recognized as an internal or external command,
 operable program or batch file.
 ```
 
@@ -48,8 +48,8 @@ ensure that you are using the proper python environment using which you download
 
 CLI Arguments are given below :
 
-```batch
-Usage : mangadex-dl [OPTIONS]
+```
+Usage : mangadex_dl [OPTIONS]
 
 Help:
     -h, --help              print this help message and exit
@@ -61,7 +61,7 @@ Download:
     -r, --range             the range of chapters to download.
     -pdf                    download manga as chapterwise pdfs (default)
     -img                    download manga as chapterwise images
-
+    --data                   download manga in high quality
 Post-Download-Processing:
     -m, --merge-pdf         merges all chapter pdfs into one file
     -s, --single-folder     collect all images into a single folder
@@ -69,46 +69,46 @@ Post-Download-Processing:
 
 for more info for each option you can run:
 
-```batch
-mangadex-dl --help <option>
+```
+mangadex_dl --help <option>
 ```
 
 <h2>Example Usage </h2>
 
 1. Downloads chapters 1 to 9 of manga as merged PDF
    
-    ```batch
-    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -m -r 1 10
+    ```
+    mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -m -r 1 10
     ```
 </br>
  
 2. Downloads chapters 1 to 9 of manga as single-folder images
-   ```batch
-   mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -s -r 1 10
+   ```
+   mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -s -r 1 10
    ```
 </br>
  
 3. Downloads chapter as PDF
-   ```batch
-   mangadex-dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -pdf
+   ```
+   mangadex_dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -pdf
    ```
 </br>
  
 4. Downloads chapter as Images
-   ```batch
-   mangadex-dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -img
+   ```
+   mangadex_dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -img
    ```
 </br>
  
 5. Downloads chapters 1 to 9 as chapterwise PDFs
-    ```batch
-    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -r 1 10
+    ```
+    mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -r 1 10
     ```
 </br>
 
 6. Downloads chapters 1 to 9 as chapterwise images
-   ```batch
-   mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -r 1 10
+   ```
+   mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -r 1 10
    ```
 </br>
 
