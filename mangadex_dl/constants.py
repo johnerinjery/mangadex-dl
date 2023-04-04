@@ -1,4 +1,4 @@
-VERSION = '1.4.0'
+VERSION = '2.0.0'
 LANGUAGE_CODES = {'sa': 'Arabic', 'bd': 'Bengali', 'bg': 'Bulgarian', 'mm': 'Burmese', 'ct': 'Catalan', 'cz': 'Czech', 'dk': 'Danish', 'nl': 'Dutch', 'en': 'English', 'ph': 'Filipino', 'fi': 'Finnish', 'fr': 'French', 'de': 'German', 'gr': 'Greek', 'il': 'Hebrew', 'in': 'Hindi', 'hu': 'Hungarian', 'id': 'Indonesian', 'it': 'Italian',
                   'ja': 'Japanese', 'kr': 'Korean', 'lt': 'Lithuanian', 'my': 'Malay', 'mn': 'Mongolian', 'ir': 'Persian', 'pl': 'Polish', 'br': 'Portuguese (Br)', 'pt': 'Portuguese (Pt)', 'ro': 'Romanian', 'ru': 'Russian', 'rs': 'Serbo-Croatian', 'es': 'Spanish (Es)', 'mx': 'Spanish (LATAM)', 'se': 'Swedish', 'th': 'Thai', 'tr': 'Turkish',
                   'ua': 'Ukrainian', 'vn': 'Vietnames', 'zh': 'Simplified Chinese', 'zh-hk': 'Traditional Chinese', 'pt-br': 'Brazilian Portugese', 'es-la': 'Latin American Spanish', 'ja-ro': 'Romanized Japanese', 'ko-ro': 'Romanized Korean', 'zh-ro': 'Romanized Chinese'}
