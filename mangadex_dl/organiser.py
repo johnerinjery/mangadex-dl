@@ -48,7 +48,7 @@ class Organiser:
             return False
         else:
             if self.tl not in list(lang_c.keys()):
-                print('Invalid language code ----------------')
+                print('ERROR: Invalid language code. Availiable language codes here : https://github.com/john-erinjery/mangadex-dl#codes')
             else:
                 if self.manga_url != None:
                     if not api.get_manga_volumes_and_chapters(manga_id=self.manga_url.split('/')[-2], translatedLanguage=[self.tl]):

@@ -134,7 +134,7 @@ https://github.com/john-erinjery/mangadex-dl
     '-s,--single-folder': 'Option only availiable when downloading as image files. All images will be sorted and stored in a single folder.',
     '-m,--merge-pdf': 'Option only availiable when downloading as pdf files. All pdfs will be merged into a single pdf.',
     '--data': 'downloads manga in higher quality. note that the program might become slower with this option.',
-    '-tl,--translated-language': 'the language code for managdex translations.\nall codes availiable here : '
+    '-tl,--translated-language': 'the language code for managdex translations.\nall codes availiable here : https://github.com/john-erinjery/mangadex-dl#codes'
 }
 
 
