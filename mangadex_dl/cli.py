@@ -31,7 +31,6 @@ from shutil import rmtree
 from random import randint
 from time import sleep
 
-VERSION = '1.3.0'
 args = argv
 arg_dict = get_arguments(args)
 

@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from mangadex_dl.cli import VERSION
+from mangadex_dl.constants import VERSION
 
 with open("README.md") as f:
     long_description = f.read()

@@ -21,7 +21,7 @@ This software is completely open source.
 Feel free to use it as you like!
 
 '''
-VERSION = '1.3.0'
+from mangadex_dl.constants import VERSION
 abc = 'abcdefghijklmnopqrstuvwxyz'
 
 
