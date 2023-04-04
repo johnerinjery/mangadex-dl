@@ -56,12 +56,14 @@ Help:
     -V, --version           display the version of MangaDex-dl
 
 Download:
-    -t, --manga-url         the mangadex manga url
-    -c, --chapter-url       the mangadex chapter url
-    -r, --range             the range of chapters to download.
-    -pdf                    download manga as chapterwise pdfs (default)
-    -img                    download manga as chapterwise images
-    --data                   download manga in high quality
+    -t, --manga-url                 the mangadex manga url (url is title page url)
+    -c, --chapter-url               the mangadex chapter url (url is chapter url)
+    -r, --range                     the range of chapters to download. (if manga url provided)
+    -pdf                            download manga as chapterwise pdfs (default)
+    -img                            download manga as chapterwise images
+    --data                          download manga in high quality
+    -tl, --translated-language      the language code for managdex translations (default en)
+
 Post-Download-Processing:
     -m, --merge-pdf         merges all chapter pdfs into one file
     -s, --single-folder     collect all images into a single folder
@@ -112,6 +114,65 @@ mangadex_dl --help <option>
    ```
 </br>
 
+<h2 id='codes'>Language Codes </h2>
+
+|  Code     |          Language              |
+|-------|------------------------|
+| sa    | Arabic                 |
+| bd    | Bengali                |
+| bg    | Bulgarian              |
+| mm    | Burmese                |
+| ct    | Catalan                |
+| cz    | Czech                  |
+| dk    | Danish                 |
+| nl    | Dutch                  |
+| en    | English                |
+| ph    | Filipino               |
+| fi    | Finnish                |
+| fr    | French                 |
+| de    | German                 |
+| gr    | Greek                  |
+| il    | Hebrew                 |
+| in    | Hindi                  |
+| hu    | Hungarian              |
+| id    | Indonesian             |
+| it    | Italian                |
+| ja    | Japanese               |
+| kr    | Korean                 |
+| lt    | Lithuanian             |
+| my    | Malay                  |
+| mn    | Mongolian              |
+| ir    | Persian                |
+| pl    | Polish                 |
+| br    | Portuguese (Br)        |
+| pt    | Portuguese (Pt)        |
+| ro    | Romanian               |
+| ru    | Russian                |
+| rs    | Serbo-Croatian         |
+| es    | Spanish (Es)           |
+| mx    | Spanish (LATAM)        |
+| se    | Swedish                |
+| th    | Thai                   |
+| tr    | Turkish                |
+| ua    | Ukrainian              |
+| vn    | Vietnames              |
+| zh    | Simplified Chinese     |
+| zh-hk | Traditional Chinese    |
+| pt-br | Brazilian Portugese    |
+| es-la | Latin American Spanish |
+| ja-ro | Romanized Japanese     |
+| ko-ro | Romanized Korean       |
+| zh-ro | Romanized Chinese      |
+
+
+<h2> Credits </h2>
+
+- This program is build using a [mangadex api wrapper](https://pypi.org/project/mangadex/) build by Eduardo Ceja and maintained by [EMACC99.](https://pypi.org/user/EMACC99/)
+
+- In certain parts of the program, it uses the official [mangadex api](https://api.managdex.org/) directly.
+- The program is build using these tools, whose credits goes to their devolopers and maintainers
+  
+<br/>
 <h2>In coming releases..</h2>
 
 - Support for MangaDex user account, access to library and reading lists

@@ -81,7 +81,7 @@ def main():
                             'ERROR: Could not download chapter. Check your network connection and try again later.')
 
             else:
-                manga = Manga(organiser.manga_url)
+                manga = Manga(organiser.manga_url, translation=organiser.tl)
                 print('\nStarting download of {}..'.format(manga.title))
                 print('initialising download in folder : {}'.format(os.getcwd()))
                 print('getting chapters and volumes..')
@@ -128,7 +128,7 @@ def main():
 
             else:
 
-                manga = Manga(organiser.manga_url)
+                manga = Manga(organiser.manga_url, translation=organiser.tl)
                 print('\nStarting download of {}..'.format(manga.title))
                 print('initialising download in folder : {}'.format(os.getcwd()))
                 print('getting chapters and volumes..')
@@ -150,3 +150,7 @@ def main():
                     os.rename(
                         folder_name, f'Chapter {organiser.range_[0]}-{organiser.range_[1]}')
                 print('done!')
+
+
+if __name__ == '__main__':
+    main()

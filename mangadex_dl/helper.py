@@ -80,19 +80,20 @@ Startup:
     -V, --version           display the version of MangaDex-dl
 
 Download:
-    -t, --manga-url         the mangadex manga url (url is title page url)
-    -c, --chapter-url       the mangadex chapter url (url is chapter url) (currently unavailiable)
-    -r, --range             the range of chapters to download. (if manga url provided)
-    -pdf                    download manga as chapterwise pdfs (default)
-    -img                    download manga as chapterwise images
-    --data                   download manga in high quality
+    -t, --manga-url                 the mangadex manga url (url is title page url)
+    -c, --chapter-url               the mangadex chapter url (url is chapter url) (currently unavailiable)
+    -r, --range                     the range of chapters to download. (if manga url provided)
+    -pdf                            download manga as chapterwise pdfs (default)
+    -img                            download manga as chapterwise images
+    --data                          download manga in high quality
+    -tl, --translated-language      the language code for managdex translations, run mangadex_dl --help -tl for more info
 
 Post-Download-Processing:
     -m, --merge-pdf         merges all chapter pdfs into one file
     -s, --single-folder     collect all images into a single folder
 
 for more information about an option,
-Run mangadex-dl --help <option>
+Run mangadex_dl --help <option>
 
 in case of bugs/issues/discussions please open an issue at
 https://github.com/john-erinjery/mangadex-dl
@@ -106,18 +107,20 @@ Startup:
     -V, --version           display the version of MangaDex-dl
 
 Download:
-    -t, --manga-url         the mangadex manga url (url is title page url)
-    -c, --chapter-url       the mangadex chapter url (url is chapter url) (currently unavailiable)
-    -r, --range             the range of chapters to download. (if manga url provided)
-    -pdf                    download manga as chapterwise pdfs (default)
-    -img                    download manga as chapterwise images
-    --data                   download manga in high quality
+    -t, --manga-url                 the mangadex manga url (url is title page url)
+    -c, --chapter-url               the mangadex chapter url (url is chapter url)
+    -r, --range                     the range of chapters to download. (if manga url provided)
+    -pdf                            download manga as chapterwise pdfs (default)
+    -img                            download manga as chapterwise images
+    --data                          download manga in high quality
+    -tl, --translated-language      the language code for managdex translations, run mangadex_dl --help -tl for more info (default en)
+
 Post-Download-Processing:
     -m, --merge-pdf         merges all chapter pdfs into one file
     -s, --single-folder     collect all images into a single folder
 
 for more information about an option,
-Run mangadex-dl --help <option>
+Run mangadex_dl --help <option>
 
 in case of bugs/issues/discussions please open an issue at
 https://github.com/john-erinjery/mangadex-dl
@@ -130,7 +133,8 @@ https://github.com/john-erinjery/mangadex-dl
     '-img': 'Downloads mangs as chapter-wise image folders. Output will be an "imgs" folder containing image chapter folders',
     '-s,--single-folder': 'Option only availiable when downloading as image files. All images will be sorted and stored in a single folder.',
     '-m,--merge-pdf': 'Option only availiable when downloading as pdf files. All pdfs will be merged into a single pdf.',
-    '--data': 'downloads manga in higher quality. note that the program might become slower with this option.'
+    '--data': 'downloads manga in higher quality. note that the program might become slower with this option.',
+    '-tl,--translated-language': 'the language code for managdex translations.\nall codes availiable here : '
 }
 
 
@@ -169,6 +173,7 @@ def get_arguments(args):
     merge = False
     single_folder = False
     data_saver = True
+    tl = 'en'
     if len(args) == 1:
         help_()
         return None
@@ -191,6 +196,10 @@ def get_arguments(args):
                 manga_url = obj_at_next_index(i, args)
             elif i == '-c' or i == '--chapter-url':
                 chapter_url = obj_at_next_index(i, args)
+            elif i == '-tl' or i == '--translated-launguage':
+                tl = obj_at_next_index(i, args)
+            elif i == tl:
+                continue
             elif i == '-r' or i == '--range':
                 range_1 = obj_at_next_index(i, args, 2)
                 for i in range_1:
@@ -214,4 +223,4 @@ def get_arguments(args):
             else:
                 print('ERROR: Invalid Option', i)
                 return None
-    return {'manga_url': manga_url, 'chapter_url': chapter_url, 'range': range_, 'pdf': pdf, 'img': img, 'merge': merge, 'single_folder': single_folder, 'data_saver': data_saver}
+    return {'manga_url': manga_url, 'chapter_url': chapter_url, 'range': range_, 'pdf': pdf, 'img': img, 'merge': merge, 'single_folder': single_folder, 'data_saver': data_saver, 'tl': tl}

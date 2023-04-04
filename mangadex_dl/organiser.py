@@ -2,6 +2,9 @@ from PyPDF2 import PdfMerger, PdfReader
 import os
 from PIL import Image, UnidentifiedImageError
 from mangadex_dl.helper import name_gen
+from mangadex_dl.constants import LANGUAGE_CODES as lang_c
+from mangadex import Api
+api = Api()
 
 
 class Organiser:
@@ -15,6 +18,7 @@ class Organiser:
         self.merge = args_dict['merge']
         self.single_folder = args_dict['single_folder']
         self.data_saver = args_dict['data_saver']
+        self.tl = args_dict['tl']
 
     def args_evaluvator(self):
 
@@ -43,7 +47,15 @@ class Organiser:
             print('ERROR: Cannot be both img and merge')
             return False
         else:
-            return True
+            if self.tl not in list(lang_c.keys()):
+                print('Invalid language code ----------------')
+            else:
+                if self.manga_url != None:
+                    if not api.get_manga_volumes_and_chapters(manga_id=self.manga_url.split('/')[-2], translatedLanguage=[self.tl]):
+                        print(
+                            'managdex does not have any availiable translations of this manga in', lang_c[self.tl])
+                    else:
+                        return True
 
     def convert_chapter_images_to_pdf(self, ch_image_path_: dict):
         '''

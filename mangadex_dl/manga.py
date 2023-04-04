@@ -4,8 +4,9 @@ api = mangadex.Api()
 
 
 class Manga:
-    def __init__(self, _url) -> None:
+    def __init__(self, _url, translation) -> None:
         self.url = _url
+        self.tl = translation
         self.id = self.url.split('/')[-2]
         self.title = self.name_of_manga()
         self.chapters = self.number_of_chaps_vols()[0]()
@@ -13,13 +14,13 @@ class Manga:
 
     def name_of_manga(self):
         try:
-            return api.view_manga_by_id(manga_id=self.id).title['en']
+            return api.view_manga_by_id(manga_id=self.id).title[self.tl]
         except:
             return ''
 
     def number_of_chaps_vols(self):
         manga_dict = api.get_manga_volumes_and_chapters(
-            manga_id=self.id, translatedLanguage=['en'])
+            manga_id=self.id, translatedLanguage=[self.tl])
         last_volume = list(manga_dict.keys())
 
         def chapters():
@@ -32,7 +33,7 @@ class Manga:
 
     def get_chapter_dict(self, range_=[]):
         manga_dict = api.get_manga_volumes_and_chapters(
-            manga_id=self.id, translatedLanguage=['en'])
+            manga_id=self.id, translatedLanguage=[self.tl])
         chapters_dict_ = {}
         for i in dict(manga_dict).keys():
             chapters_dict_.update(manga_dict[i]['chapters'])
