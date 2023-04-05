@@ -81,22 +81,30 @@ def main():
 
             else:
                 manga = Manga(organiser.manga_url, translation=organiser.tl)
-                print('\nStarting download of {}..'.format(manga.title))
+                if manga.title != '':
+                    print('\nStarting download of {}..'.format(manga.title))
+
                 print('initialising download in folder : {}'.format(os.getcwd()))
                 print('getting chapters and volumes..')
                 ch_dict = manga.get_chapter_dict(organiser.range_)
                 for i in ch_dict:
                     chapter = MangaChapter(
                         'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
-                    chapter.download_chapter(organiser.data_saver)
-                    ch_images = None
-                    with open('all_images_paths_ch_dict.txt') as f:
-                        all_images_paths_ch_dict = eval(f.read())
-                    for j in all_images_paths_ch_dict:
-                        if str(i) == str(j):
-                            ch_images = {
-                                str(i): all_images_paths_ch_dict[str(i)]}
-                            organiser.convert_chapter_images_to_pdf(ch_images)
+                    status = chapter.download_chapter(organiser.data_saver)
+                    if status != 0:
+                        ch_images = None
+                        with open('all_images_paths_ch_dict.txt') as f:
+                            all_images_paths_ch_dict = eval(f.read())
+                        for j in all_images_paths_ch_dict:
+                            if str(i) == str(j):
+                                ch_images = {
+                                    str(i): all_images_paths_ch_dict[str(i)]}
+                                organiser.convert_chapter_images_to_pdf(
+                                    ch_images)
+                    else:
+                        print('\nconverting downloaded chapters to pdf..')
+                        rmtree(i)
+                        break
                 if organiser.merge:
                     organiser.pdf_merger()
                 else:
@@ -135,7 +143,14 @@ def main():
                 for i in ch_dict:
                     chapter = MangaChapter(
                         'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
-                    chapter.download_chapter(organiser.data_saver)
+                    status = chapter.download_chapter(organiser.data_saver)
+                    if status != 0:
+                        pass
+                    else:
+                        organiser.range_[1] = float(i) - 1.0
+                        print('organising downloaded image folders..')
+                        break
+
                 print('Organising Image folders..')
                 if organiser.single_folder:
                     organiser.single_folder_images()

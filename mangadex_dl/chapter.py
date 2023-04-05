@@ -26,8 +26,9 @@ class MangaChapter(Organiser):
             data = r.json()
             baseurl = data['baseUrl']
             hash = data['chapter']['hash']
+            time.sleep(0.75)
         except:
-            time.sleep(5.0)
+            time.sleep(6.0)
             try:
                 r = requests.get(
                     url='https://api.mangadex.org/at-home/server/' + self.id)
@@ -102,5 +103,4 @@ class MangaChapter(Organiser):
         else:
             with open('all_images_paths_ch_dict.txt', 'w') as f:
                 f.write(str({ch_number: all_ch_image_path}))
-
         return 1

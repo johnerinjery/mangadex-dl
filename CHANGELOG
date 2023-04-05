@@ -1,2 +1,9 @@
-2024-04-04
+2023-04-04
  - version 2.0.0 : major update : Added support for all languages availiable on mangadex
+
+2023-04-05
+- version 2.1.0 : security update
+    
+    at times while executing the program for downloading hundreds of chapters at once,
+    the mangadex api server might become crowded and block our requests. (this happened in the 216th chapter for me)
+    when this happens, the program will process the already downlaoded chapters and give a promt to download the other chapters after soome time - data spent will not be lost.
