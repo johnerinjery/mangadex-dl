@@ -12,7 +12,7 @@ setup(
                       'PyPDF2==3.0.1', 'requests==2.28.2'],
     author="John Erinjery",
     author_email="jancyvinod415@gmail.com",
-    packages=['mangadex_dl'],
+    packages=['mangadex_dl', 'mangadex_dl.static'],
     include_package_data=True,
     url="https://github.com/john-erinjery/mangadex-dl/",
     license="MIT",

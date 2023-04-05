@@ -1,4 +1,3 @@
-#!env python
 '''
 MangaDex-dl CLI
 
@@ -23,7 +22,7 @@ Feel free to use it as you like!
 '''
 from mangadex_dl.constants import VERSION
 abc = 'abcdefghijklmnopqrstuvwxyz'
-
+import importlib.resources as resource
 
 def make_sortable(stack):
     lenght = len(stack)
@@ -70,72 +69,7 @@ def path_prettify(path: str):
     return new_path
 
 
-help_dict = {
-    'general,': '''
-MangaDex-dl CLI, a manga download software powered by MangaDex API
-Usage : mangadex_dl [OPTION]
-
-Startup:
-    -h, --help              print this help message and exit
-    -V, --version           display the version of MangaDex-dl
-
-Download:
-    -t, --manga-url                 the mangadex manga url (url is title page url)
-    -c, --chapter-url               the mangadex chapter url (url is chapter url) (currently unavailiable)
-    -r, --range                     the range of chapters to download. (if manga url provided)
-    -pdf                            download manga as chapterwise pdfs (default)
-    -img                            download manga as chapterwise images
-    --data                          download manga in high quality
-    -tl, --translated-language      the language code for managdex translations, run mangadex_dl --help -tl for more info
-
-Post-Download-Processing:
-    -m, --merge-pdf         merges all chapter pdfs into one file
-    -s, --single-folder     collect all images into a single folder
-
-for more information about an option,
-Run mangadex_dl --help <option>
-
-in case of bugs/issues/discussions please open an issue at
-https://github.com/john-erinjery/mangadex-dl
-''',
-    '-h,--help': '''
-MangaDex-dl CLI, a manga download software powered by MangaDex API
-Usage : mangadex_dl [OPTION]
-
-Startup:
-    -h, --help              print this help message and exit
-    -V, --version           display the version of MangaDex-dl
-
-Download:
-    -t, --manga-url                 the mangadex manga url (url is title page url)
-    -c, --chapter-url               the mangadex chapter url (url is chapter url)
-    -r, --range                     the range of chapters to download. (if manga url provided)
-    -pdf                            download manga as chapterwise pdfs (default)
-    -img                            download manga as chapterwise images
-    --data                          download manga in high quality
-    -tl, --translated-language      the language code for managdex translations, run mangadex_dl --help -tl for more info (default en)
-
-Post-Download-Processing:
-    -m, --merge-pdf         merges all chapter pdfs into one file
-    -s, --single-folder     collect all images into a single folder
-
-for more information about an option,
-Run mangadex_dl --help <option>
-
-in case of bugs/issues/discussions please open an issue at
-https://github.com/john-erinjery/mangadex-dl
-''',
-    '-V,--version': f'current version of MangaDex-dl is {VERSION}',
-    '-t,--manga-url': '\nThe MangaDex manga homepage url.\nNote that this is different from the chapter url. Manga URLs are of the form:\n\nhttps://mangadex.org/title/<manga-id>/<manga-name>\n\nfor eg: https://mangadex.org/title/9417ab7d-b231-4481-8279-34a873cc820f/chicchai-senpai-ga-kawaisugiru',
-    '-c,--chapter-url': '\nThe MangaDex chapter url\nNote that this is different from the manga url. Chapter URLs are of the form:\n\nhttps://mangadex.org/chapter/<chapter-id>\n\nfor eg: https://mangadex.org/chapter/23deab8b-8866-401a-925d-115788a0027c',
-    '-r,--range': 'The chapter range to be downloaded. Use only when providing Manga URLs.\n\nFormat : -r/--range <chapter-start> <chapter-end>\n\nTo download a single chapter pass the same value twice eg: --range 100 100',
-    '-pdf': 'Downloads manga as chapter-wise pdfs. Output will be a folder "pdf" containing pdf files of the chapters.',
-    '-img': 'Downloads mangs as chapter-wise image folders. Output will be an "imgs" folder containing image chapter folders',
-    '-s,--single-folder': 'Option only availiable when downloading as image files. All images will be sorted and stored in a single folder.',
-    '-m,--merge-pdf': 'Option only availiable when downloading as pdf files. All pdfs will be merged into a single pdf.',
-    '--data': 'downloads manga in higher quality. note that the program might become slower with this option.',
-    '-tl,--translated-language': 'the language code for managdex translations.\nall codes availiable here : https://github.com/john-erinjery/mangadex-dl#codes'
-}
+help_dict = eval(resource.read_text('mangadex_dl.static', 'help.txt'))
 
 
 def help_(func='general'):
