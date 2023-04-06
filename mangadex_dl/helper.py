@@ -20,9 +20,11 @@ This software is completely open source.
 Feel free to use it as you like!
 
 '''
+import os
 from mangadex_dl.constants import VERSION
 abc = 'abcdefghijklmnopqrstuvwxyz'
-import importlib.resources as resource
+base = os.path.dirname(os.path.abspath(__file__))
+
 
 def make_sortable(stack):
     lenght = len(stack)
@@ -69,7 +71,7 @@ def path_prettify(path: str):
     return new_path
 
 
-help_dict = eval(resource.read_text('mangadex_dl.static', 'help.txt'))
+help_dict = eval(open(os.path.join(base, 'static/help.txt')).read())
 
 
 def help_(func='general'):
