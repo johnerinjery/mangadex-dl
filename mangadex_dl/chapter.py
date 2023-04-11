@@ -26,7 +26,7 @@ class MangaChapter(Organiser):
             data = r.json()
             baseurl = data['baseUrl']
             hash = data['chapter']['hash']
-            time.sleep(0.75)
+            time.sleep(0.8)
         except:
             time.sleep(6.0)
             try:

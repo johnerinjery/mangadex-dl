@@ -9,6 +9,9 @@ mangadex-dl is a command line interface written in python that downloads manga f
 mangadex-dl enables you to : </br>
 
 - Download manga from [mangadex.org](https://mangadex.org/) using manga-urls or chapter-urls
+- Any translation availiable on mangadex can be downloaded
+- Provides a data saver option
+- Higher quality downloads are also availiable
 - Multiple chapters can be downloaded using manga urls
 - Single chapters can be downloaded using chapter-urls
 - Downloaded manga can be saved as PDFs or as images
@@ -18,7 +21,7 @@ mangadex-dl enables you to : </br>
 
 <h2>How does mangadex-dl download manga? </h2>
 
-mangadex-dl utilises the [mangadex api](https://api.mangadex.org/) to search and download manga
+mangadex-dl utilises the [mangadex api](https://api.mangadex.org/) via a [mangadex api wrapper](https://pypi.org/project/mangadex/) to search and download manga
 
 <h2>Installation</h2>
 
@@ -114,6 +117,12 @@ mangadex_dl --help <option>
    ```
 </br>
 
+7. Download chapters in Russian with high quality
+   ```
+   mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf --translated-language rs -data
+
+<br/>
+
 <h2 id='codes'>Language Codes </h2>
 
 |  Code     |          Language              |
@@ -177,4 +186,8 @@ mangadex_dl --help <option>
 
 - Support for MangaDex user account, access to library and reading lists
 - Functionality to search new manga from within the shell
+- 
+<br/>
+<h2><b>NOTICE</b></h2>
 
+- The mangadex api has temporarily taken down its authentification features as they are moving to OAuth for secure authentification. Until they have completed it I wont be able to build login features for mangadex-dl

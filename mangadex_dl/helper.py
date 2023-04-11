@@ -1,25 +1,3 @@
-'''
-MangaDex-dl CLI
-
-This Command Line Client uses the ManagDex API to download manga
-and store it in image or PDF format.
-
-You can choose whether to have the software merge all the chapters
-downloaded into a single PDF, or have it in Chapterwise PDFs
-
-If you choose to download manga in image format, you can choose
-whether to save it in chapterwise folders or as a single large folder.
-- this option is made to make it more convinient for readers to scroll
-  through and read manga
-- another feature is that if the files are named in a format that
-  Andriod phones and PC's will be able to sort easily.
-- it names files in the format aaa-1.jpg, aab-2.jpg...ect.
-  if not, the file order will be quite messed up
-
-This software is completely open source.
-Feel free to use it as you like!
-
-'''
 import os
 from mangadex_dl.constants import VERSION
 abc = 'abcdefghijklmnopqrstuvwxyz'
