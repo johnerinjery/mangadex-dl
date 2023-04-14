@@ -4,6 +4,15 @@ import os
 base = os.path.dirname(os.path.abspath(__file__))
 lib_path = os.path.join(base, 'static/library.csv')
 
+"""
+1. Add manga to library
+2. Remove manga from lib
+3. Modify manga
+4. exit
+5. while
+
+"""
+
 
 def add_item(params: dict):
     with open(lib_path, 'a') as f:
@@ -36,3 +45,6 @@ def display_library():
     for i in range(1, len(data)):
         table.add_row(data[i])
     print(table)
+
+
+display_library()
