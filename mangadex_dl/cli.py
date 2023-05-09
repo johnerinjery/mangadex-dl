@@ -21,7 +21,6 @@ Feel free to use it as you like!
 
 '''
 
-from sys import argv
 from mangadex_dl.helper import *
 from mangadex_dl.organiser import Organiser
 from mangadex_dl.manga import Manga
@@ -30,9 +29,34 @@ import os
 from shutil import rmtree
 from random import randint
 from time import sleep
+import argparse
+from mangadex_dl.constants import VERSION
 
-args = argv
-arg_dict = get_arguments(args)
+parser = argparse.ArgumentParser(prog='mangadex-dl',
+                                 formatter_class=argparse.RawDescriptionHelpFormatter,
+                                 description='Python CLI that downloads manga from mangadex.org as PDF or images', epilog='in case of suggestions or bugs, please open an issue on the project github :\nhttps://github.com/john-erinjery/mangadex-dl')
+
+parser.add_argument('-v', '--version', action="version",
+                    version=f'mangadex-dl {VERSION}')
+parser.add_argument('-t', '--manga-url', action='store',
+                    help='the manga homepage url', type=str, dest='manga_url', metavar='')
+parser.add_argument('-c', '--chapter-url',
+                    help='the chapter url', dest='chapter_url', metavar='')
+parser.add_argument('-pdf', help='organise manga into chapterwise PDFs',
+                    dest='pdf', action='store_true', default=False)
+parser.add_argument('-m', '--merge', help="merge chapter PDFs into single PDF (-pdf must be provided)",
+                    dest='merge', action='store_true', default=False)
+parser.add_argument('-img', help="organise manga into chapterwise image folders",
+                    dest='img', action='store_true', default=False)
+parser.add_argument('-s', '--single-folder', help="organise manga into chapterwise image folders (-img must be provided)",
+                    dest='single_folder', action='store_true', default=False)
+parser.add_argument('--data', help='enable data saver (default)',
+                    action='store_true', dest='data_saver', default=True)
+parser.add_argument('-r', '--range', action='extend', nargs=2,
+                    help='range of chapters to download, eg: -r 1 5 (download chapters 1 - 4)', dest='range', metavar='', type=int)
+parser.add_argument('-tl', '--translated-language', action='store', default='en',
+                    help='language code of translation (default : en, others availiable on github homepage)', metavar='', dest='tl')
+arg_dict = dict(parser.parse_args()._get_kwargs())
 
 
 def main():

@@ -71,92 +71,9 @@ def path_prettify(path: str):
     return new_path
 
 
-help_dict = eval(open(os.path.join(base, 'static/help.txt')).read())
-
-
-def help_(func='general'):
-    help_dict_ops = []
-    help_dict_all_ops = []
-    for i in help_dict.keys():
-        help_dict_ops.append(i.split(','))
-        for j in i.split(','):
-            if j != '':
-                help_dict_all_ops.append(j)
-    if func not in help_dict_all_ops:
-        print('ERROR : Invalid Option')
-    else:
-        for i in help_dict_ops:
-            if func in i:
-                print(help_dict[list(help_dict.keys())
-                                [help_dict_ops.index(i)]])
-
-
 def obj_at_next_index(obj, stack, steps=1):
     index = stack.index(obj) + 1
     if steps == 1:
         return stack[index]
     else:
         return stack[index: index + steps]
-
-
-def get_arguments(args):
-    manga_url = None
-    chapter_url = None
-    range_ = []
-    range_1 = []
-    pdf = True
-    img = False
-    merge = False
-    single_folder = False
-    data_saver = True
-    tl = 'en'
-    if len(args) == 1:
-        help_()
-        return None
-    elif len(args) == 2:
-        if args[-1] == '-V' or args[-1] == '--version':
-            help_('-V')
-            return None
-        elif args[-1] == '-h' or args[-1] == '--help':
-            help_()
-            return None
-        else:
-            print('ERROR: Invalid Syntax')
-            return None
-    elif len(args) == 3 and (('--help' in args) or ('-h' in args)):
-        help_(args[-1])
-        return None
-    else:
-        for i in args[1:]:
-            if i == '-t' or i == '--manga-url':
-                manga_url = obj_at_next_index(i, args)
-            elif i == '-c' or i == '--chapter-url':
-                chapter_url = obj_at_next_index(i, args)
-            elif i == '-tl' or i == '--translated-launguage':
-                tl = obj_at_next_index(i, args)
-            elif i == tl:
-                continue
-            elif i == '-r' or i == '--range':
-                range_1 = obj_at_next_index(i, args, 2)
-                for i in range_1:
-                    range_.append(ret_float_or_int(i))
-                range_.sort()
-            elif i == '-pdf':
-                continue
-            elif i == '-img':
-                pdf = False
-                img = True
-            elif i == '-m' or i == '--merge-pdf':
-                merge = True
-            elif i == '--data':
-                data_saver = False
-            elif i == '-s' or i == '--single-folder':
-                single_folder = True
-            elif i in range_1:
-                continue
-            elif i == manga_url or i == chapter_url:
-                continue
-            else:
-                print('ERROR: Invalid Option', i)
-                return None
-    return {'manga_url': manga_url, 'chapter_url': chapter_url, 'range': range_, 'pdf': pdf, 'img': img, 'merge': merge, 'single_folder': single_folder, 'data_saver': data_saver, 'tl': tl}
