@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 from mangadex_dl.constants import VERSION
 
 with open("README.md") as f:

@@ -7,3 +7,7 @@
     at times while executing the program for downloading hundreds of chapters at once,
     the mangadex api server might become crowded and block our requests. (this happened in the 216th chapter for me)
     when this happens, the program will process the already downloaded chapters and give a prompt to download the other chapters after some time - data spent will not be lost.
+
+2023-05-09
+- version 3.0.0 : code optimization
+  improvised code to make the program faster (by a lot)
