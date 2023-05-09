@@ -20,150 +20,128 @@ This software is completely open source.
 Feel free to use it as you like!
 
 '''
-
-from sys import argv
-from mangadex_dl.helper import *
 from mangadex_dl.organiser import Organiser
 from mangadex_dl.manga import Manga
 from mangadex_dl.chapter import MangaChapter
+from mangadex_dl.constants import VERSION
 import os
 from shutil import rmtree
 from random import randint
 from time import sleep
+import argparse
+import sys
+parser = argparse.ArgumentParser(prog='mangadex-dl',
+                                 formatter_class=argparse.RawDescriptionHelpFormatter,
+                                 description='Python CLI that downloads manga from mangadex.org as PDF or images', epilog='in case of suggestions or bugs, please open an issue on the project github :\nhttps://github.com/john-erinjery/mangadex-dl')
 
-args = argv
-arg_dict = get_arguments(args)
+parser.add_argument('-v', '--version', action="version",
+                    version=f'mangadex-dl {VERSION}')
+parser.add_argument('-t', '--manga-url', action='store',
+                    help='the manga homepage url', type=str, dest='manga_url', metavar='')
+parser.add_argument('-c', '--chapter-url',
+                    help='the chapter url', dest='chapter_url', metavar='')
+parser.add_argument('-pdf', help='organise manga into chapterwise PDFs',
+                    dest='pdf', action='store_true', default=False)
+parser.add_argument('-m', '--merge', help="merge chapter PDFs into single PDF (-pdf must be provided)",
+                    dest='merge', action='store_true', default=False)
+parser.add_argument('-img', help="organise manga into chapterwise image folders",
+                    dest='img', action='store_true', default=False)
+parser.add_argument('-s', '--single-folder', help="organise manga into chapterwise image folders (-img must be provided)",
+                    dest='single_folder', action='store_true', default=False)
+parser.add_argument('--data', help='enable data saver (default)',
+                    action='store_true', dest='data_saver', default=True)
+parser.add_argument('-r', '--range', action='extend', nargs=2,
+                    help='range of chapters to download, eg: -r 1 5 (download chapters 1 - 4)', dest='range', metavar='', type=int)
+parser.add_argument('-tl', '--translated-language', action='store', default='en',
+                    help='language code of translation (default : en, others availiable on github homepage)', metavar='', dest='tl')
+arg_dict = dict(parser.parse_args()._get_kwargs())
 
 
 def main():
     '''
     Main Entry Point of the CLI
     '''
-    if arg_dict != None:
-        pass
-    else:
-        return
-
     organiser = Organiser(args_dict=arg_dict)
 
-    if organiser.args_evaluvator():
-        folder_name = 'manga' + str(randint(10000, 99999))
-        os.mkdir(folder_name)
-        os.chdir(folder_name)
+    if not organiser.args_evaluvator():
+        sys.exit()
+
+    folder_name = 'manga' + str(randint(10000, 99999))
+    os.mkdir(folder_name)
+    os.chdir(folder_name)
+
+    if organiser.chapter_url != None:
+        chp = MangaChapter(organiser.chapter_url)
+        if chp.chapter_name != None:
+            print(
+                f'\nStarting download of Chapter {chp.chapter_number} : {chp.chapter_name}')
+        print(
+            f'initialising download in folder : {os.getcwd()}')
+
+        chp.download_chapter(organiser.data_saver)
+        if organiser.pdf:
+            ch_img_dict = eval(open('all_images_paths_ch_dict.txt').read())
+            organiser.convert_chapter_images_to_pdf(ch_img_dict)
+            os.rename(f'pdf/{chp.chapter_number}.pdf',
+                      f'../Chapter {chp.chapter_number}.pdf')
+        else:
+            os.rename(str(chp.chapter_number),
+                      f'../Chapter {chp.chapter_number}')
+        print('deleting cache and temp folder..')
+        os.chdir('..')
+        rmtree(folder_name)
+        print('done!')
+        sys.exit()
+
+    manga = Manga(organiser.manga_url, translation=organiser.tl)
+    if manga.title:
+        print('\nStarting download of {}..'.format(manga.title))
+    print('initialising download in folder : {}'.format(os.getcwd()))
+    print('getting chapters and volumes..')
+    ch_dict = manga.get_chapter_dict(organiser.range_)
+
+    for i in ch_dict:
+        chapter = MangaChapter(
+            'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
+
+        try:
+            all_ch_imgs_dict = chapter.download_chapter(organiser.data_saver)
+        except:
+            if organiser.pdf:
+                print('\nconverting downloaded chapters to pdf..')
+            else:
+                organiser.range_[1] = float(i) - 1.0
+                print('organising downloaded image folders..')
+            rmtree(i)
+            break
 
         if organiser.pdf:
-
-            if organiser.chapter_url != None:
-                chapter = MangaChapter(organiser.chapter_url)
-                print(
-                    f'\nStarting download of Chapter {chapter.chapter_number} : {chapter.chapter_name}')
-                print(
-                    f'initialising download in folder : {os.getcwd()}')
-
-                ret = chapter.download_chapter(organiser.data_saver)
-                if ret == 1:
-                    ch_img_path_dict = eval(
-                        open('all_images_paths_ch_dict.txt').read())
-                    organiser.convert_chapter_images_to_pdf(ch_img_path_dict)
-                    os.rename(f'pdf/{chapter.chapter_number}.pdf',
-                              f'../Chapter {chapter.chapter_number}.pdf')
-                    print('deleting cache and temp folder..')
-                    os.chdir('..')
-                    rmtree(folder_name)
-                    print('done!')
-
-                else:
-                    sleep(5.0)
-                    ret = chapter.download_chapter(organiser.data_saver)
-                    if ret != 1:
-                        print(
-                            'ERROR: Could not download chapter. Check your network connection and try again later.')
-
-            else:
-                manga = Manga(organiser.manga_url, translation=organiser.tl)
-                if manga.title != '':
-                    print('\nStarting download of {}..'.format(manga.title))
-
-                print('initialising download in folder : {}'.format(os.getcwd()))
-                print('getting chapters and volumes..')
-                ch_dict = manga.get_chapter_dict(organiser.range_)
-                for i in ch_dict:
-                    chapter = MangaChapter(
-                        'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
-                    status = chapter.download_chapter(organiser.data_saver)
-                    if status != 0:
-                        ch_images = None
-                        with open('all_images_paths_ch_dict.txt') as f:
-                            all_images_paths_ch_dict = eval(f.read())
-                        for j in all_images_paths_ch_dict:
-                            if str(i) == str(j):
-                                ch_images = {
-                                    str(i): all_images_paths_ch_dict[str(i)]}
-                                organiser.convert_chapter_images_to_pdf(
-                                    ch_images)
-                    else:
-                        print('\nconverting downloaded chapters to pdf..')
-                        rmtree(i)
-                        break
-                if organiser.merge:
-                    organiser.pdf_merger()
-                else:
-                    os.rename(
-                        'pdf', f'../Chapter {organiser.range_[0]}-{organiser.range_[1]}')
-                print('\ndeleting cache and temp folder..')
-                os.chdir('..')
-                rmtree(folder_name)
-                print('done!')
-
+            organiser.convert_chapter_images_to_pdf(all_ch_imgs_dict)
+    if organiser.pdf:
+        if organiser.merge:
+            organiser.pdf_merger()
         else:
-
-            if organiser.chapter_url != None:
-                chapter = MangaChapter(organiser.chapter_url)
-                print(
-                    f'\nStarting download of Chapter {chapter.chapter_number} : {chapter.chapter_name}')
-                print(
-                    f'initialising download in folder : {os.path.join(os.getcwd(), folder_name)}')
-                chapter.download_chapter(organiser.data_saver)
-                for i in os.listdir('.'):
-                    if os.path.isdir(i):
-                        print('Organising image folder..')
-                        os.rename(i, f'../Chapter {i}')
-                print('deleting cache and temp folders..')
-                os.chdir('..')
-                rmtree(folder_name)
-                print('done!')
-
-            else:
-
-                manga = Manga(organiser.manga_url, translation=organiser.tl)
-                print('\nStarting download of {}..'.format(manga.title))
-                print('initialising download in folder : {}'.format(os.getcwd()))
-                print('getting chapters and volumes..')
-                ch_dict = manga.get_chapter_dict(organiser.range_)
-                for i in ch_dict:
-                    chapter = MangaChapter(
-                        'https://mangadex.org/chapter/{}'.format(ch_dict[i]))
-                    status = chapter.download_chapter(organiser.data_saver)
-                    if status != 0:
-                        pass
-                    else:
-                        organiser.range_[1] = float(i) - 1.0
-                        print('organising downloaded image folders..')
-                        break
-
-                print('Organising Image folders..')
-                if organiser.single_folder:
-                    organiser.single_folder_images()
-                    os.rename(
-                        'imgs', f'../Chapter {organiser.range_[0]}-{organiser.range_[1]}')
-                else:
-                    for i in os.listdir('.'):
-                        if os.path.isfile(i):
-                            os.remove(i)
-                    os.chdir('..')
-                    os.rename(
-                        folder_name, f'Chapter {organiser.range_[0]}-{organiser.range_[1]}')
-                print('done!')
+            os.rename(
+                'pdf', f'../chapter {organiser.range_[0]}-{organiser.range_[1]}')
+    if organiser.img:
+        if organiser.single_folder:
+            organiser.single_folder_images()
+            os.rename(
+                'imgs', f'../chapter {organiser.range_[0]}-{organiser.range_[1]}')
+        else:
+            print('organising image folders..')
+            for i in os.listdir('.'):
+                if os.path.isfile(i):
+                    os.remove(i)
+            os.chdir('..')
+            os.rename(
+                folder_name, f'Chapter {organiser.range_[0]}-{organiser.range_[1]}')
+            print('done!')
+            sys.exit()
+    print('deleting cache and temp folders..')
+    os.chdir('..')
+    rmtree(folder_name)
+    print('done!')
 
 
 if __name__ == '__main__':

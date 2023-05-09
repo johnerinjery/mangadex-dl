@@ -28,10 +28,10 @@ class Organiser:
         elif self.manga_url != None and self.chapter_url != None:
             print('ERROR: both manga and chapter urls should not be provided')
             return False
-        elif self.manga_url != None and self.range_ == []:
+        elif self.manga_url != None and self.range_ == None:
             print('ERROR: Range must be provided for manga urls')
             return False
-        elif self.chapter_url != None and self.range_ != []:
+        elif self.chapter_url != None and self.range_ != None:
             print('ERROR: Range should not be provided for chapter urls')
             return False
         elif self.pdf and self.img:
@@ -49,13 +49,17 @@ class Organiser:
         else:
             if self.tl not in list(lang_c.keys()):
                 print('ERROR: Invalid language code. Availiable language codes here : https://github.com/john-erinjery/mangadex-dl#codes')
+                return False
             else:
                 if self.manga_url != None:
                     if not api.get_manga_volumes_and_chapters(manga_id=self.manga_url.split('/')[-2], translatedLanguage=[self.tl]):
                         print(
                             'managdex does not have any availiable translations of this manga in', lang_c[self.tl])
+                        return False
                     else:
                         return True
+                else:
+                    return True
 
     def convert_chapter_images_to_pdf(self, ch_image_path_: dict):
         '''
@@ -64,12 +68,11 @@ class Organiser:
         - the argument is a single element dictionary whose key is the chapter number and value is a list contaning
           paths to the chapter images
         '''
-
-        ch_image_path = ch_image_path_
-        image_list = list(ch_image_path.values())[0]
-        image_objs = []
+        print('converting chapter to PDF..\n')
         if not os.path.exists('pdf'):
             os.mkdir('pdf')
+        image_list = list(ch_image_path_.values())[0]
+        image_objs = []
         for i in image_list:
             try:
                 image_objs.append(Image.open(str(i)).convert('RGB'))
@@ -77,12 +80,9 @@ class Organiser:
                 print('truncination error in image {}. skipping page..'.format(
                     image_list.index(i)))
                 continue
-        print('converting chapter to PDF..\n')
-
         try:
-            image_objs[0].save('pdf/' + str(list(ch_image_path.keys())[0]) +
+            image_objs[0].save('pdf/' + str(list(ch_image_path_.keys())[0]) +
                                '.pdf', save_all=True, append_images=image_objs[1:])
-
         except UnidentifiedImageError:
             print('unidentified image detected, skipping..')
 
