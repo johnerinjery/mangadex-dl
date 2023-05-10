@@ -13,9 +13,10 @@ mangadex-dl enables you to : </br>
 - Single chapters can be downloaded using chapter-urls
 - Downloaded manga can be saved as PDFs or as images
 - Multiple chapter PDFs can be merged into one
+- Download manga in any language that is availiable in mangadex
 - Multiple chapter images can be brought into a single folder for a smoother reading experience
 - Downloaded Images are saved with a naming convention that ensures proper order of images in mobiles
-
+- Have a local library of your manga inside your computer that can be managed from within the program
 <h2>How does mangadex-dl download manga? </h2>
 
 mangadex-dl utilises the [mangadex api](https://api.mangadex.org/) to search and download manga
@@ -31,14 +32,14 @@ pip install mangadex-dl
 to ensure package is installed correctly, run this script form shell:
 
 ```
-mangadex_dl --version
+mangadex-dl --version
 ```
 and it should return the version of managdex-dl you downloaded.
 
 if you see an error like this :
 
 ```
-'mangadex_dl' is not recognized as an internal or external command,
+'mangadex-dl' is not recognized as an internal or external command,
 operable program or batch file.
 ```
 
@@ -49,30 +50,26 @@ ensure that you are using the proper python environment using which you download
 CLI Arguments are given below :
 
 ```
-Usage : mangadex_dl [OPTIONS]
+usage: mangadex-dl [options]
 
-Help:
-    -h, --help              print this help message and exit
-    -V, --version           display the version of MangaDex-dl
+Python CLI that downloads manga from mangadex.org as PDF or images
 
-Download:
-    -t, --manga-url                 the mangadex manga url (url is title page url)
-    -c, --chapter-url               the mangadex chapter url (url is chapter url)
-    -r, --range                     the range of chapters to download. (if manga url provided)
-    -pdf                            download manga as chapterwise pdfs (default)
-    -img                            download manga as chapterwise images
-    --data                          download manga in high quality
-    -tl, --translated-language      the language code for managdex translations (default en)
-
-Post-Download-Processing:
-    -m, --merge-pdf         merges all chapter pdfs into one file
-    -s, --single-folder     collect all images into a single folder
-```
-
-for more info for each option you can run:
-
-```
-mangadex_dl --help <option>
+options:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+  -lib, --library       start a library session where you can view and modify your local library
+  -t , --manga-url      the manga homepage url
+  -tcode , --manga-code
+                        The library code of the manga, as stored in local lib
+  -c , --chapter-url    the chapter url
+  -pdf                  organise manga into chapterwise PDFs
+  -m, --merge           merge chapter PDFs into single PDF (-pdf must be provided)
+  -img                  organise manga into chapterwise image folders
+  -s, --single-folder   organise manga into chapterwise image folders (-img must be provided)
+  --data                enable data saver (default)
+  -r  , --range         range of chapters to download, eg: -r 1 5 (download chapters 1 - 4)
+  -tl , --translated-language
+                            language code of translation (default : en, others availiable on github homepage)
 ```
 
 <h2>Example Usage </h2>
@@ -80,40 +77,59 @@ mangadex_dl --help <option>
 1. Downloads chapters 1 to 9 of manga as merged PDF
    
     ```
-    mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -m -r 1 10
+    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -m -r 1 10
     ```
 </br>
  
 2. Downloads chapters 1 to 9 of manga as single-folder images
    ```
-   mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -s -r 1 10
+   mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -s -r 1 10
    ```
 </br>
  
 3. Downloads chapter as PDF
    ```
-   mangadex_dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -pdf
+   mangadex-dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -pdf
    ```
 </br>
  
 4. Downloads chapter as Images
    ```
-   mangadex_dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -img
+   mangadex-dl --chapter-url https://mangadex.org/chapter/63b17ee1-857f-441a-85a7-2e3767204497 -img
    ```
 </br>
  
 5. Downloads chapters 1 to 9 as chapterwise PDFs
     ```
-    mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -r 1 10
+    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -r 1 10
     ```
 </br>
 
 6. Downloads chapters 1 to 9 as chapterwise images
    ```
-   mangadex_dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -r 1 10
+   mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -img -r 1 10
    ```
 </br>
 
+7. To access your library
+    ```
+    mangadex-dl --library
+    ```
+</br>
+
+8. To download a manga using library code (S.No in local library):
+   ```
+   mangadex-dl -tcode 1 -pdf -m -r 1 3
+   ```
+   > here the manga with S.No 1 in the library will be downloaded. note that if the S.No does not exist in the library an error will be raised
+
+</br>
+
+9.  Downloads chapters 1 to 9 as merged PDF in French
+    ```
+    mangadex-dl -t https://mangadex.org/title/2e0fdb3b-632c-4f8f-a311-5b56952db647/bocchi-the-rock -pdf -m -tl fr
+    ```
+</br>
 <h2 id='codes'>Language Codes </h2>
 
 |  Code     |          Language              |

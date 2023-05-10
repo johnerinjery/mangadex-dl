@@ -1,5 +1,5 @@
 '''
-MangaDex-dl CLI
+mangadex-dl CLI
 
 This Command Line Client uses the ManagDex API to download manga
 and store it in image or PDF format.
@@ -24,20 +24,45 @@ from mangadex_dl.organiser import Organiser
 from mangadex_dl.manga import Manga
 from mangadex_dl.chapter import MangaChapter
 from mangadex_dl.constants import VERSION
+from mangadex_dl.library import add_item, library
 import os
 from shutil import rmtree
 from random import randint
-from time import sleep
 import argparse
 import sys
-parser = argparse.ArgumentParser(prog='mangadex-dl',
-                                 formatter_class=argparse.RawDescriptionHelpFormatter,
-                                 description='Python CLI that downloads manga from mangadex.org as PDF or images', epilog='in case of suggestions or bugs, please open an issue on the project github :\nhttps://github.com/john-erinjery/mangadex-dl')
 
+SUPPRESS = '==SUPPRESS=='
+
+
+class LibraryAction(argparse.Action):
+
+    def __init__(self,
+                 option_strings,
+                 dest=SUPPRESS,
+                 default=None,
+                 help="start a library session where you can view and modify your local library"):
+        super(LibraryAction, self).__init__(
+            option_strings=option_strings,
+            dest=dest,
+            default=default,
+            nargs=0,
+            help=help)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        library()
+        parser.exit()
+
+
+parser = argparse.ArgumentParser(prog='mangadex-dl',
+                                 formatter_class=argparse.RawDescriptionHelpFormatter, usage='mangadex-dl [options]',
+                                 description='Python CLI that downloads manga from mangadex.org as PDF or images', epilog='in case of suggestions or bugs, please open an issue on the project github :\nhttps://github.com/john-erinjery/mangadex-dl')
 parser.add_argument('-v', '--version', action="version",
                     version=f'mangadex-dl {VERSION}')
+parser.add_argument('-lib', '--library', action=LibraryAction)
 parser.add_argument('-t', '--manga-url', action='store',
                     help='the manga homepage url', type=str, dest='manga_url', metavar='')
+parser.add_argument('-tcode', '--manga-code', type=int,
+                    help='The library code of the manga, as stored in local lib', dest='tcode', metavar='', action='store', default=None)
 parser.add_argument('-c', '--chapter-url',
                     help='the chapter url', dest='chapter_url', metavar='')
 parser.add_argument('-pdf', help='organise manga into chapterwise PDFs',
@@ -96,6 +121,9 @@ def main():
     manga = Manga(organiser.manga_url, translation=organiser.tl)
     if manga.title:
         print('\nStarting download of {}..'.format(manga.title))
+        add_item((manga.title, organiser.range_, organiser.manga_url))
+    else:
+        add_item(('<no-eng-title>', organiser.range_, organiser.manga_url))
     print('initialising download in folder : {}'.format(os.getcwd()))
     print('getting chapters and volumes..')
     ch_dict = manga.get_chapter_dict(organiser.range_)

@@ -7,9 +7,9 @@ with open("README.md") as f:
 setup(
     name="mangadex_dl",
     version=VERSION,
-    python_requires=">=3.10",
+    python_requires=">=3.7",
     install_requires=['mangadex==2.5.2', 'Pillow==9.4.0',
-                      'PyPDF2==3.0.1', 'requests==2.28.2'],
+                      'PyPDF2==3.0.1', 'requests==2.28.2', 'prettytable==3.7.0'],
     author="John Erinjery",
     author_email="jancyvinod415@gmail.com",
     packages=['mangadex_dl'],
@@ -21,7 +21,7 @@ setup(
     long_description_content_type="text/markdown",
     entry_points={
         "console_scripts": [
-            "mangadex_dl=mangadex_dl.cli:main",
+            "mangadex-dl=mangadex_dl.cli:main",
         ],
     },
     classifiers=[

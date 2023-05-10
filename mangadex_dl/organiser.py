@@ -2,6 +2,7 @@ from PyPDF2 import PdfMerger, PdfReader
 import os
 from PIL import Image, UnidentifiedImageError
 from mangadex_dl.helper import name_gen
+from mangadex_dl.library import _get_lib_data
 from mangadex_dl.constants import LANGUAGE_CODES as lang_c
 from mangadex import Api
 api = Api()
@@ -19,9 +20,12 @@ class Organiser:
         self.single_folder = args_dict['single_folder']
         self.data_saver = args_dict['data_saver']
         self.tl = args_dict['tl']
+        self.tcode = args_dict['tcode']
 
     def args_evaluvator(self):
-
+        if self.tcode != None:
+            self.manga_url = 'https://mangadex.org/title/' + \
+                _get_lib_data(tcode=self.tcode)[-1]
         if self.manga_url == self.chapter_url == None:
             print('ERROR: manga or chapter url must be provided')
             return False

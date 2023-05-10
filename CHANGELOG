@@ -11,3 +11,8 @@
 2023-05-09
 - version 3.0.0 : code optimization
   improvised code to make the program faster (by a lot)
+
+2023-05-10
+- version 3.5.0: added library feature
+  you can now access a local library
+  mangadex_dl console script changed to mangadex-dl
