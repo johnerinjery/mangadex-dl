@@ -2,7 +2,7 @@
 <h1 style='font-size:38px;' align="center">mangadex-dl</h1>
 </p>
 <h2><font color="red">DISCLAIMER</font></h2>
-I am not pdating this repository any longer. The code here is mostly for reference if anyone is intrested. </br></br>
+I am not updating this repository any longer. The code here is mostly for reference if anyone is intrested. </br></br>
 mangadex-dl is a command line interface written in python that downloads manga from [mangadex.org](https://mangadex.org/) as PDF or images
 
 <h2>What does mangadex-dl do? </h2>
